@@ -1,0 +1,38 @@
+# Distributed Commerce Platform - Code Ownership
+# Format: <path> <owner-github-or-name>
+
+# Global Project Oversight
+* @AyushMule-Lead
+
+# Backend Microservices & API Gateway
+/backend/api-gateway/           @PrathameshHandifode-Dev1 @AyushMule-Lead
+/backend/auth-service/          @PrathameshHandifode-Dev1
+/backend/catalog-service/       @AtharvJadhav-Dev3
+/backend/order-service/         @ShubhamJadhav-Dev4
+/backend/notification-service/  @ShubhamJadhav-Dev4
+
+# Frontend React Application
+/frontend/                      @ShravanShinde-Dev2
+
+# Testing & Quality Assurance
+**/src/test/                    @AkashKamble-QA
+/tests/                         @AkashKamble-QA
+
+# Git & Repository Management
+/.github/                       @AtharvKothawale-Git
+
+# CI/CD Jenkins Pipelines
+/jenkins/                       @YashKhankar-Jenkins
+Jenkinsfile                     @YashKhankar-Jenkins
+
+# Kubernetes Manifests
+/k8s/                           @OmkarPatil-K8s
+
+# Docker & Containerization
+/docker/                        @RajvardhanJagtap-Docker
+**/Dockerfile*                  @RajvardhanJagtap-Docker
+docker-compose*.yml             @RajvardhanJagtap-Docker
+
+# SRE, Reliability & Operations
+/monitoring/                    @AvadhutPatil-SRE
+/docs/runbooks/                 @AvadhutPatil-SRE

@@ -1,0 +1,44 @@
+# Compiled Java / Maven
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# Node & Frontend
+**/node_modules/
+**/dist/
+frontend/dist/
+frontend/build/
+.npm
+*.tsbuildinfo
+
+# IDE & Editor Config
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker / DB data volumes
+**/data/
+**/postgres_data/
+**/kafka_data/
+**/zookeeper_data/
