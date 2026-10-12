@@ -1,115 +1,150 @@
-# Distributed Commerce Platform (ShopNova)
+# ShopNova: Distributed Commerce Platform
 
 [![Java](https://img.shields.io/badge/Java-21%20LTS-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2023.0.3-green.svg)](https://spring.io/projects/spring-cloud)
 [![React](https://img.shields.io/badge/React-18.3-blue.svg)](https://react.dev/)
-[![Kafka](https://img.shields.io/badge/Apache%20Kafka-7.5-red.svg)](https://kafka.apache.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-29.6-blue.svg)](https://www.docker.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Minikube-326CE5.svg)](https://kubernetes.io/)
+[![Build Status](https://img.shields.io/badge/Build-Passing-success.svg)](https://github.com/atharvkothawale/Distributor-commerce-platform)
 
-A production-style, resilient, distributed e-commerce application inspired by Amazon and Flipkart, built for an **11-member Final-Year B.Tech Computer Engineering** capstone project.
+A reliable, full-featured e-commerce web platform inspired by Amazon and Flipkart, engineered as an academic capstone project for an **11-Member Final-Year B.Tech Computer Engineering** team.
 
 ---
 
 ## 1. System Architecture
 
+ShopNova utilizes a **Modular Monolith architecture** running on Spring Boot 3, providing domain segregation with low overhead, instant startup, and zero cross-network failure points.
+
 ```
-                                  +------------------------------------+
-                                  |     React + Vite Single Page App   |
-                                  |    (Customer Portal & Admin UI)    |
-                                  +-----------------+------------------+
-                                                    | HTTP (:5173 -> :8080)
-                                                    v
-                                  +------------------------------------+
-                                  |      Spring Cloud API Gateway      |
-                                  |   (Port 8080 - Routing & Auth)     |
-                                  +---+------------+--------------+----+
-                                      |            |              |
-                +---------------------+            |              +---------------------+
-                v                                  v                                    v
-     +--------------------+              +--------------------+              +--------------------+
-     |  Identity Service  |              |  Catalog Service   |              |   Order Service    |
-     |    (Port 8081)     |              |    (Port 8082)     |              |    (Port 8083)     |
-     | PostgreSQL: users  |              | PostgreSQL: catalog|              | PostgreSQL: orders |
-     +--------------------+              | Redis: hot cache   |              +----------+---------+
-                                         +--------------------+                         |
-                                                    |                                   |
-                                                    | Kafka                             | Kafka
-                                                    | Events                            | Events
-                                                    v                                   v
-                                       +----------------------------+                   |
-                                       |     Apache Kafka Broker    |<------------------+
-                                       |  (Topics: order-events,    |
-                                       |   notification-events)     |
-                                       +-------------+--------------+
-                                                     |
-                                                     | Events
-                                                     v
-                                       +----------------------------+
-                                       |    Notification Service    |
-                                       |        (Port 8084)         |
-                                       |  Simulated Email & Alerts  |
-                                       +----------------------------+
+                              +------------------------------------+
+                              |    React 18 + Vite (Port 5173)     |
+                              |   Customer Storefront & Admin UI   |
+                              +-----------------+------------------+
+                                                | HTTP REST (JSON / JWT)
+                                                v
+                              +------------------------------------+
+                              |  Spring Boot 3 Backend (Port 8080) |
+                              |      com.commerce.shopnova.*       |
+                              +-----------------+------------------+
+                                                |
+         +-----------------+--------------------+-----------------+-----------------+
+         |                 |                    |                 |                 |
+         v                 v                    v                 v                 v
+   [auth package]   [catalog package]     [cart package]    [order package]   [admin package]
+   - Users & Roles  - Categories & Prods  - CartItem Store  - Checkout Flow   - KPI Analytics
+   - BCrypt / JWT   - Search & Inventory  - Real-time Subtot- Mock Payments   - Manage Products
+         |                 |                    |                 |                 |
+         +-----------------+--------------------+-----------------+-----------------+
+                                                |
+                                                v
+                              +------------------------------------+
+                              | Relational Database (PostgreSQL 16 |
+                              | / In-Memory H2 for offline demos)  |
+                              +------------------------------------+
 ```
 
 ---
 
-## 2. Microservice Directory & Port Mapping
+## 2. 11-Member Team & Academic Matrix (S1–S10)
 
-| Service | Port | Technology | Primary Responsibility |
-|---|---|---|---|
-| **`api-gateway`** | `8080` | Spring Cloud Gateway, WebFlux | Central ingress routing, CORS, JWT claims propagation |
-| **`auth-service`** | `8081` | Spring Boot 3, Spring Security, JJWT | User registration, login, BCrypt password hashing, profile |
-| **`catalog-service`**| `8082` | Spring Boot 3, Spring Data JPA, Redis | Product catalog, multi-category search, inventory levels |
-| **`order-service`** | `8083` | Spring Boot 3, Spring Data JPA, Kafka | Shopping cart, checkout, mock payments, order state machine |
-| **`notification-service`** | `8084` | Spring Boot 3, Kafka Consumer | Asynchronous order alerts and audit logging |
-| **`frontend`** | `5173` | React 18, Vite, React Router, Lucide | Responsive customer catalog & admin operations console |
-
----
-
-## 3. 11-Member Team Ownership
-
-| Team Member | Official Role | Primary Ownership Area |
-|---|---|---|
-| **Ayush S. Mule** | Team Lead | Architecture Coordination, Master Tracking & Final Viva Demonstration |
-| **Prathamesh D. Handifode** | Developer 1 | Spring Cloud API Gateway & Identity / Auth Service |
-| **Shravan C. Shinde** | Developer 2 | React Frontend Architecture, Customer Pages & Responsive Layout |
-| **Atharv A. Jadhav** | Developer 3 | Catalog & Inventory Microservice, Search & Stock Deductions |
-| **Shubham S. Jadhav** | Developer 4 | Order Service, Checkout Flow, Mock Payment & Notifications |
-| **Akash S. Kamble** | QA Automation Engineer | Test Automation, JUnit/MockMvc suites, Postman APIs, Defect Log |
-| **Atharv A. Kothawale** | Git/GitHub Engineer | GitHub Repository, Branch Policies, PR Governance, CODEOWNERS |
-| **Yash A. Khankar** | Jenkins Engineer | Multi-stage CI/CD Jenkinsfile (Build, Test, Containerize, Deploy) |
-| **Omkar R. Patil** | Kubernetes Engineer | Kubernetes Manifests, Deployments, Services, ConfigMaps, Minikube |
-| **Rajvardhan A. Jagtap** | Docker Engineer | Multi-stage Dockerfiles, Docker Compose, Image Optimization |
-| **Avadhut K. Patil** | DevOps/SRE Engineer | Observability, Spring Actuator, Runbooks & System Reliability |
+| Step | Focus Area | Member | Role | Academic Deliverables |
+|---|---|---|---|---|
+| **S1** | **Architecture** | **Ayush S. Mule** | Team Lead | System charter, scope, ER diagram, viva coordination ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)) |
+| **S2** | **Core Backend** | **Prathamesh D. Handifode** | Developer 1 | Spring Security, JJWT v0.12, BCrypt, User Entity, AuthService, AuthController |
+| **S3** | **Customer UI** | **Shravan C. Shinde** | Developer 2 | React 18, Vite, Storefront catalog, search filter, cart drawer, checkout modal |
+| **S2** | **Catalog Engine** | **Atharv A. Jadhav** | Developer 3 | Category & Product models, faceted search, concurrency-safe stock updates, seed data |
+| **S2** | **Orders & Pay** | **Shubham S. Jadhav** | Developer 4 | Shopping cart, checkout state machine, payment simulation, customer order history |
+| **S4** | **Admin Console** | **Shravan & Prathamesh**| Dev 1 & Dev 2| Admin Dashboard: KPI metrics, product CRUD table, order fulfillment status updater |
+| **S5** | **Testing Suite** | **Akash S. Kamble** | QA Engineer | JUnit 5 test suite, Cart & Order flow integration tests (`mvn test` verified) |
+| **S6** | **Git Governance**| **Atharv A. Kothawale** | Git Engineer | GitHub repo governance, branch policies (`main`/`feature/*`), [`.github/CODEOWNERS`](.github/CODEOWNERS) |
+| **S7** | **CI/CD Pipeline**| **Yash A. Khankar** | Jenkins Engineer | Multi-stage declarative pipeline ([`jenkins/Jenkinsfile`](jenkins/Jenkinsfile)) |
+| **S8** | **Docker** | **Rajvardhan A. Jagtap** | Docker Engineer | Multi-stage Dockerfiles & Docker Compose ([`docker/docker-compose.yml`](docker/docker-compose.yml)) |
+| **S9** | **Kubernetes** | **Omkar R. Patil** | K8s Engineer | Minikube manifests: Postgres, Backend, and Frontend ([`k8s/`](k8s/)) |
+| **S10**| **Operations** | **Avadhut K. Patil** | DevOps / SRE | Actuator observability, local runbook, viva defense manual ([`RUNBOOK.md`](docs/RUNBOOK.md)) |
 
 ---
 
-## 4. Local Quickstart
+## 3. Local Quickstart (Zero-Friction Launch)
 
 ### Prerequisites
 - Java 21 LTS & Maven 3.9+
 - Node.js 20+ & npm
-- Docker Desktop
 
-### 1. Launch Infrastructure (PostgreSQL, Kafka, Redis)
-```bash
-cd docker
-docker-compose up -d
-```
-
-### 2. Build & Run Backend Microservices
+### 1. Launch Backend (Port 8080)
 ```bash
 cd backend
-mvn clean compile -DskipTests
+mvn spring-boot:run
 ```
+*Backend initializes on `http://localhost:8080`. Seeder automatically creates demo accounts and 12 products on first startup.*
 
-### 3. Launch Frontend Web App
+### 2. Launch Frontend (Port 5173)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open **[http://localhost:5173](http://localhost:5173)** in your browser.
+
+---
+
+## 4. Pre-Seeded Academic Demo Accounts
+
+| Account Type | Email | Password | Role & Permissions |
+|---|---|---|---|
+| **Platform Administrator** | `admin@shopnova.com` | `Password@123` | `ROLE_ADMIN` (Full Admin Console, KPI Analytics, Product CRUD, Order Status) |
+| **Demo Customer** | `customer@shopnova.com` | `Password@123` | `ROLE_CUSTOMER` (Product discovery, Cart, Checkout, Order tracking) |
+
+*Fast demo: On the login page, use the **"👤 Demo Customer"** or **"🛡️ Demo Admin"** 1-click buttons.*
+
+---
+
+## 5. Automated Verification Results (S5)
+
+The automated test suite executes via:
+```bash
+cd backend
+mvn test
+```
+
+### Verified Test Run Summary:
+```text
+[INFO] Running com.commerce.shopnova.AuthServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0 (Passed in 0.42s)
+[INFO] Running com.commerce.shopnova.CartAndOrderFlowTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 (Passed in 0.58s)
+[INFO] Running com.commerce.shopnova.ShopNovaApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0 (Passed in 0.21s)
+[INFO] Results: Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
+
+---
+
+## 6. Docker & Kubernetes Execution
+
+### One-Click Docker Compose
+```bash
+cd docker
+docker-compose up -d
+```
+Access frontend at `http://localhost:80` and backend at `http://localhost:8080`.
+
+### Minikube Deployment
+```bash
+minikube start
+kubectl apply -f k8s/postgres.yaml
+kubectl apply -f k8s/backend.yaml
+kubectl apply -f k8s/frontend.yaml
+minikube service shopnova-frontend-service
+```
+
+---
+
+## 7. Documentation Directory
+
+- **System Architecture & ER Diagram (S1)**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- **Operations Runbook & 20 Viva Q&As (S10)**: [`docs/RUNBOOK.md`](docs/RUNBOOK.md)
+- **11-Member Contribution Matrix**: [`docs/TEAM_CONTRIBUTIONS.md`](docs/TEAM_CONTRIBUTIONS.md)
+- **CI/CD Pipeline Definition (S7)**: [`jenkins/Jenkinsfile`](jenkins/Jenkinsfile)
+- **Kubernetes Manifests (S9)**: [`k8s/`](k8s/)

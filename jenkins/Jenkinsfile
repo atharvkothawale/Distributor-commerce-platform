@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    /*
+     * ShopNova CI/CD Pipeline
+     * Academic Requirement S7 - Yash A. Khankar (Jenkins Engineer)
+     * Demonstrates continuous integration: build, automated testing, and artifact packaging
+     */
+
+    environment {
+        JAVA_HOME = tool 'Java21'
+        MAVEN_HOME = tool 'Maven3'
+        PATH = "${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${env.PATH}"
+    }
+
+    stages {
+        stage('1. Checkout Repository') {
+            steps {
+                echo 'Checking out latest code from branch: ${env.BRANCH_NAME}...'
+                checkout scm
+            }
+        }
+
+        stage('2. Backend Compile & Unit Tests') {
+            steps {
+                dir('backend') {
+                    echo 'Running Spring Boot clean compile and JUnit 5 test suite...'
+                    bat 'mvn clean test'
+                }
+            }
+            post {
+                always {
+                    junit 'backend/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('3. Backend Package') {
+            steps {
+                dir('backend') {
+                    echo 'Packaging ShopNova executable Spring Boot JAR...'
+                    bat 'mvn package -DskipTests'
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
+        }
+
+        stage('4. Frontend Verification') {
+            steps {
+                dir('frontend') {
+                    echo 'Installing npm dependencies and executing Vite production build...'
+                    bat 'npm ci'
+                    bat 'npm run build'
+                }
+            }
+        }
+
+        stage('5. Docker Image Build') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Building production Docker images...'
+                bat 'docker build -f docker/Dockerfile.backend -t shopnova-backend:latest backend'
+                bat 'docker build -f docker/Dockerfile.frontend -t shopnova-frontend:latest frontend'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '==================================================='
+            echo 'ShopNova CI/CD Pipeline SUCCEEDED!'
+            echo 'All JUnit tests passed. Artifacts packaged.'
+            echo '==================================================='
+        }
+        failure {
+            echo 'Pipeline failed. Check surefire test logs for details.'
+        }
+    }
+}
