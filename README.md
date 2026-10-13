@@ -10,6 +10,28 @@
 
 A reliable, full-featured e-commerce web platform inspired by Amazon and Flipkart, engineered as an academic capstone project for an **11-Member Final-Year B.Tech Computer Engineering** team.
 
+## Project Objectives
+
+The main objective of **ShopNova: Distributed Commerce Platform** is to develop a web-based e-commerce application that demonstrates the core functionality of an online shopping system using modern frontend, backend, and database technologies. This project is developed as an academic capstone by an 11-member final-year Computer Engineering team.
+
+The specific objectives of ShopNova are:
+
+1. **Secure User Authentication:** Provide customer registration and login, role-based access control, and secure authentication using Spring Security and JWT.
+2. **Product Catalog Management:** Allow users to browse products, view product details, search the catalog, and explore available categories.
+3. **Shopping Cart:** Enable customers to add products to their cart, update quantities, and review their selections before checkout.
+4. **Order Processing:** Implement the checkout process, order creation, order history, and order-status tracking.
+5. **Payment Simulation:** Demonstrate the payment step in the checkout workflow without processing real financial transactions.
+6. **Administrative Management:** Provide authorized administrators with tools to manage products and orders and view relevant dashboard metrics.
+7. **Database Integration:** Store and manage application data using a relational database, with support for an in-memory database where configured for demonstrations or testing.
+8. **Software Testing:** Use automated tests to check important authentication, cart, order, and application functionality.
+9. **DevOps and Deployment:** Demonstrate collaborative development with Git and GitHub, continuous integration with Jenkins, containerization with Docker, and deployment with Kubernetes.
+10. **Team Collaboration and Documentation:** Organize the work of the 11-member team into defined responsibilities and document the architecture, setup instructions, testing, deployment, and operational procedures.
+
+### Project Scope
+
+ShopNova demonstrates the principal workflows of an academic e-commerce application, including product discovery, authentication, cart management, order processing, and administrative operations. It also provides an opportunity to apply software engineering practices such as modular application design, automated testing, version control, and deployment automation.
+
+**Limitations:** Payments are simulated and do not process real financial transactions. The platform is intended for academic demonstration and learning, not as a production-ready commercial service without further security, performance, and operational review.
 ---
 
 ## 1. System Architecture
